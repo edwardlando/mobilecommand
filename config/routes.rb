@@ -1,5 +1,8 @@
 Mobilecommand::Application.routes.draw do
 
+  resources :pastposts
+
+
   post '/secret_twilio_interface' => 'posts#create'
 
   resources :posts
