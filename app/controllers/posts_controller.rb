@@ -24,19 +24,6 @@ class PostsController < ApplicationController
   # GET /posts/new
   # GET /posts/new.json
   def new
-    if request.post?
-
-      ACCOUNT_SID = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
-      ACCOUNT_TOKEN = '2804511ccef5b294daf82116c75a8f7d'
-      CALLER_ID = '+15712978794'
-
-      @client = Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
-      response = @client.account.sms.messages.create(
-        :from => CALLER_ID,
-        :to => params[:From],
-        :body => params[:Body]
-        )        
-    end
   end
 
   # GET /posts/1/edit
@@ -47,18 +34,23 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-    @post = Post.new(params[:post])
+    if request.post?
+    @post = Post.new(
+      :from => params[:From],
+      :body => params[:Body]
+    )  
 
-    respond_to do |format|
-      if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
-        format.json { render json: @post, status: :created, location: @post }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    @client = Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
+    response = @client.account.sms.messages.create(
+      :from => CALLER_ID,
+      :to => params[:From],
+      :body => params[:Body]
+      )   
+
+    @post.save 
     end
   end
+
 
   # PUT /posts/1
   # PUT /posts/1.json
