@@ -36,14 +36,22 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     if request.post?
+
+
+
+    @account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
+    @account_token = '2804511ccef5b294daf82116c75a8f7d'
+    @caller_id = '+15712978794'
+  
+
     @post = Post.new(
       :from => params[:From],
       :body => params[:Body]
     )  
 
-    @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
+    @client = Twilio::REST::Client.new(@account_sid, @account_token)
     response = @client.account.sms.messages.create(
-      :from => CALLER_ID,
+      :from => @caller_id,
       :to => params[:From],
       :body => params[:Body]
       )   
