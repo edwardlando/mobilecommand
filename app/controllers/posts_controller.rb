@@ -37,26 +37,31 @@ class PostsController < ApplicationController
   def create
     if request.post?
 
+    @to = params[:From] ||= params[:post][:from]
+    @body = params[:Body] ||= params[:post][:body]
+
     @account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
     @account_token = '2804511ccef5b294daf82116c75a8f7d'
     @caller_id = '+15712978794'
   
-
     @post = Post.new(
-      :from => params[:From],
-      :body => params[:Body]
+      :from => @caller_id,
+      :to => @to,
+      :body => @body
     )  
 
     @client = Twilio::REST::Client.new(@account_sid, @account_token)
-    response = @client.account.sms.messages.create(
+    response = @client.account.sms.messages.create({
       :from => @caller_id,
-      :to => params[:From],
-      :body => params[:Body]
-      )   
+      :to => @to,
+      :body => @body
+      })  
 
     @post.save 
-    end
+
+    redirect_to :controller => "posts", :action => "index"
   end
+end
 
 
   # PUT /posts/1
