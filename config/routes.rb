@@ -1,4 +1,7 @@
 Mobilecommand::Application.routes.draw do
+
+  match '/twilio_secret_interface' => 'posts#new'
+
   resources :posts
 
 
