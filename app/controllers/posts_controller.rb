@@ -59,7 +59,7 @@ class PostsController < ApplicationController
 
     @post.save 
 
-    redirect_to :controller => "posts", :action => "index", :method => "GET"
+    render 'index'
   end
 end
 
