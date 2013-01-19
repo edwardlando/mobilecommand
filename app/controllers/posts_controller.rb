@@ -51,15 +51,15 @@ class PostsController < ApplicationController
     )  
 
     @client = Twilio::REST::Client.new(@account_sid, @account_token)
-    response = @client.account.sms.messages.create({
+    response = @client.account.sms.messages.create( 
       :from => @caller_id,
       :to => @to,
       :body => @body
-      })  
+    )  
 
     @post.save 
 
-    redirect_to :controller => "posts", :action => "index"
+    redirect_to :controller => "posts", :action => "index", :method => "GET"
   end
 end
 
