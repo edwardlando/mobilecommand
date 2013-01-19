@@ -30,8 +30,8 @@ class PostsController < ApplicationController
       ACCOUNT_TOKEN = '2804511ccef5b294daf82116c75a8f7d'
       CALLER_ID = '+15712978794'
 
-      @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
-        response = @client.account.sms.messages.create(
+      @client = Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
+      response = @client.account.sms.messages.create(
         :from => CALLER_ID,
         :to => params[:From],
         :body => params[:Body]
