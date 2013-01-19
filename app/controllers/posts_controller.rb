@@ -24,11 +24,18 @@ class PostsController < ApplicationController
   # GET /posts/new
   # GET /posts/new.json
   def new
-    @post = Post.new
+    if request.post?
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @post }
+      ACCOUNT_SID = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
+      ACCOUNT_TOKEN = '2804511ccef5b294daf82116c75a8f7d'
+      CALLER_ID = '+15612071086'
+
+      @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
+        response = @client.account.sms.messages.create(
+        :from => CALLER_ID,
+        :to => params[:From],
+        :body => params[:Body]
+        )        
     end
   end
 
