@@ -37,8 +37,6 @@ class PostsController < ApplicationController
   def create
     if request.post?
 
-
-
     @account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
     @account_token = '2804511ccef5b294daf82116c75a8f7d'
     @caller_id = '+15712978794'

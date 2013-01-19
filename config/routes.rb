@@ -1,6 +1,6 @@
 Mobilecommand::Application.routes.draw do
 
-  match '/twilio_secret_interface' => 'posts#create'
+  match '/secret_twilio_interface' => 'posts#create'
 
   resources :posts
 
