@@ -1,1 +1,5 @@
 <h1> You are the mobile master </h1>
+
+<% Post.all.each do |post| %>
+  <%= post.from %>, <%= post.body %>
+<% end %>

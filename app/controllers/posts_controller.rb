@@ -24,6 +24,7 @@ class PostsController < ApplicationController
   # GET /posts/new
   # GET /posts/new.json
   def new
+    @post = Post.new()
   end
 
   # GET /posts/1/edit
@@ -40,7 +41,7 @@ class PostsController < ApplicationController
       :body => params[:Body]
     )  
 
-    @client = Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
+    @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
     response = @client.account.sms.messages.create(
       :from => CALLER_ID,
       :to => params[:From],
