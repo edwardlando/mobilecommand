@@ -113,16 +113,6 @@ module PostsHelper
 		    base_uri += "QueryKeywords="+third
 
 
-=begin
-   http://open.api.ebay.com/shopping?callname=FindPopularItems&responseencoding=JSON&appid=eBayinc2e-d3b4-4a21-a765-47cc6b01cf7&siteid=0&version=531&QueryKeywords=harry%20original
-   http://open.api.ebay.com/shopping?
-   callname=FindPopularItems&
-   responseencoding=XML&
-   appid=YourAppIDHere&
-   siteid=0&
-   version=531&
-   QueryKeywords=harry%20original
-=end
 
 		elsif (second == "PRICE")
 			# max, min and avg
@@ -176,13 +166,7 @@ module PostsHelper
 			return textback	
 		end
 			
-		
-=begin
-		    http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0
-		    &SECURITY-APPNAME=eBayinc2e-d3b4-4a21-a765-47cc6b01cf7&GLOBAL-ID=EBAY-US&RESPONSE-DATA-FORMAT=JSON
-		    &callback=_cb_findItemsByKeywords&REST-PAYLOAD&keywords=harry%20potter&paginationInput.entriesPerPage=3
-=end
-
+	
 
 	end
 
@@ -265,19 +249,69 @@ module PostsHelper
 		text.gsub!(",","+")
 
 	    text.gsub!("|","|\\")
-        map = Curl::Easy.new(base_uri+text.html_safe)
-        map.on_body do |data|
-        	puts data
-#        map = Curl.get(base_uri+text.html_safe)
-        client.account.sms.messages.create(
-        	:from => caller_id,
-        	:to => number,
-        	:body => (base_uri+text.html_safe )
-        	#:body => #("Map Image: %s?dl=false" % data) )
-    	end
-    	map.on_header {|data| puts data}
-    	map.perform
+	        client.account.sms.messages.create(
+	        	:from => caller_id,
+	        	:to => number,
+	        	:body => base_uri+text.html_safe )
+
 	end
+
+		def get_directions(origin,dest,from)
+    begin
+    arr = Array.new
+    origin.gsub!(" ","+")
+    origin.gsub!(",","+")
+    dest.gsub!(" ","+")
+    dest.gsub!(",","+")
+    map_data = ''
+    uri = URI(MapURL)
+    Net::HTTP.start(uri.host,80) { |http| 
+      req = Net::HTTP::Get.new('/maps/api/geocode/json?address=' + origin.html_safe + '&sensor=false')
+      origin = JSON.parse(http.request(req).body)['results']
+      req = Net::HTTP::Get.new('/maps/api/geocode/json?address=' + dest.html_safe + '&sensor=false')
+      dest = JSON.parse(http.request(req).body)['results']
+      if origin.nil?
+        send_message("Invalid origin",from)
+      elsif dest.nil?
+        send_message("Invalid destination",from)
+      else
+        origin = origin[0]['geometry']['location']
+        dest = dest[0]['geometry']['location']
+        dest_lat = dest['lat']
+        dest_lng = dest['lng']
+        origin_lat = origin['lat']
+        origin_lng = origin['lng']
+        params = ('/maps/api/directions/json?origin=' + origin_lat.to_s + "," +origin_lng.to_s + '&destination=' + dest_lat.to_s + "," + dest_lng.to_s + '&sensor=false').html_safe
+        req = Net::HTTP::Get.new(params)
+        map_data = JSON.parse(http.request(req).body)['routes'][0]['legs'][0]['steps']
+ 
+      end
+    }
+    map_data.each { |step| 
+      h = Hash.new
+      puts step
+      instr = step['html_instructions']
+      dist_string = step['distance']['text']
+      if step.nil? || step['distance'].nil?
+        puts "STEP IS NIL!"
+     end
+      instr.gsub!("<b>","")
+      instr.gsub!("</b>","")
+      instr=instr.split("<div")[0]
+      h['instructions'] = instr
+      h['distance'] = dist_string
+      arr.push(h)
+      msg = arr.join("\n")
+    }
+    msg   
+  rescue
+    response = @client.account.sms.messages.create(
+     :from => CALLER_ID,
+     :to => @post.from,
+     :body => "Please be more specific! we're working on this"
+     )
+  end
+  end
 
 	def duckduckgo(text)
 		base_uri = 'http://api.duckduckgo.com/?q=^&format=json'
