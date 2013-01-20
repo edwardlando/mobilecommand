@@ -97,7 +97,7 @@ module PostsHelper
 
 	def article_request(num)
 			base_uri = "http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key=39186a552e64bb003eb882b3a7486aba:10:67206205"
-
+			puts "serving an article request for article #{num}"
 
 			http = Curl.get(base_uri)
 			json_body = JSON.parse(http.body_str)
