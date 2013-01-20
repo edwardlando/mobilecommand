@@ -2,6 +2,7 @@ module PostsHelper
 
 	def nyt(second)
 		if (second == "TOP")
+			puts "in second part top"
 			base_uri = "http://api.nytimes.com/svc/mostpopular/v2"
 			base_uri+="/mostshared/all-sections/1.json"
 			base_uri += "?api-key=39186a552e64bb003eb882b3a7486aba:10:67206205"
@@ -19,7 +20,9 @@ module PostsHelper
 			end
 
 			puts top_titles
-			top_titles[0]+" " +top_titles[1]+" " +top_titles[2]
+			textback = top_titles[0]+" " +top_titles[1]+" " +top_titles[2]
+			puts textback
+			return textback
 		end
 	end
 
