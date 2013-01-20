@@ -16,7 +16,11 @@ module PostsHelper
 			end
 
 			puts top_titles
-			textback = "Top stories today:\n" + "1) " + top_titles[0]+"\n" +  "2) " + top_titles[1]+"\n" +"3) " + top_titles[2]
+			textback = "Top stories today:\n" 
+			top_titles.each.with_index do |title,ind|
+				textback+=""+ind+") " + title + "\n"
+			end
+#			textback+=+ "1) " + top_titles[0]+"\n" +  "2) " + top_titles[1]+"\n" +"3) " + top_titles[2]
 
 			o =  [('a'..'z')].map{|i| i.to_a}.flatten
 			shortcode  =  (0...3).map{ o[rand(o.length)] }.join
@@ -56,7 +60,7 @@ module PostsHelper
 
       	client = Twilio::REST::Client.new(account_sid,account_token)
 
-		if (text.length <= 145)
+		if (text.length <= 155)
 			client.account.sms.messages.create(
 			        :from => caller_id,
 			        :to => number,
@@ -64,7 +68,7 @@ module PostsHelper
 		else
 			chars_sent = 0
 			while (chars_sent+1 < text.length)
-				message = text[chars_sent..chars_sent+=145]
+				message = text[chars_sent..chars_sent+=155]
 				client.account.sms.messages.create(
 			        :from => caller_id,
 			        :to => number,
