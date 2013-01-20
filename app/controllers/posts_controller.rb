@@ -67,7 +67,7 @@ class PostsController < ApplicationController
         textback = ''
 
         keywords = ''
-        text.each_with_index do |thing,2|
+        text.each_with_index do |thing,ind|
           if (keywords == '')
             keywords = thing
           else 

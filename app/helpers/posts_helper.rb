@@ -95,7 +95,6 @@ module PostsHelper
 		end
 	end
 
-<<<<<<< HEAD
 	def ebay(second, third) # avg price for this item on ebay when you type in the name
 		# demo popular gift ideas for boys
 		#devid = '608eb297-070b-4eab-8e24-79cca0ee7f71'
@@ -148,11 +147,11 @@ module PostsHelper
 			count = results['findItemsByKeywords']['searchResult']['@count']
 			results = results['findItemsByKeywords']['searchResult']['item']
 
-			min_price = results['sellingStatus']['currentPrice']['__value__'])
-			max_price = results['sellingStatus']['currentPrice']['__value__'])
+			min_price = results['sellingStatus']['currentPrice']['__value__']
+			max_price = results['sellingStatus']['currentPrice']['__value__']
 			
 			results.each do |res|	
-				current_price = res['sellingStatus']['currentPrice']['__value__'])
+				current_price = res['sellingStatus']['currentPrice']['__value__']
 
 				if (min_price > current_price) 
 					min_price = current_price
