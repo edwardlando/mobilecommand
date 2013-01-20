@@ -53,7 +53,7 @@ class PostsController < ApplicationController
         :to => @to,
         :body => @body
         )  
-
+      @body.upcase!
       text = @body.split(" ")
       if (text[0] == "NYT")
         textback = ''
