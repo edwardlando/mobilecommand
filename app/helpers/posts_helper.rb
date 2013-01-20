@@ -286,6 +286,7 @@ end
 
 	end
 
+
 	def get_directions(origin,dest,from)
 		arr = Array.new
 		msg = ''
@@ -363,14 +364,14 @@ def duckduckgo(text)
 			puts t['Text']
 			message += (ind+1).to_s
 			message += ") "
-message += t['Text']
-message += "\n"
-else
-	break
-end
-end
-puts "Message is #{message}"
-message
+		message += t['Text']
+		message += "\n"
+		else
+			break
+		end
+	end
+	puts "Message is #{message}"
+	message
 end
 end
 
