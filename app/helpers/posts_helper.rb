@@ -119,7 +119,7 @@ module PostsHelper
 
       	client = Twilio::REST::Client.new(account_sid,account_token)
 
-		if (text.length <= 160)
+		if (text.length <= 155)
 			client.account.sms.messages.create(
 			        :from => caller_id,
 			        :to => number,
@@ -127,7 +127,7 @@ module PostsHelper
 		else
 			chars_sent = 0
 			while (chars_sent+1 < text.length)
-				message = text[chars_sent..chars_sent+=160]
+				message = text[chars_sent..chars_sent+=155]
 				client.account.sms.messages.create(
 			        :from => caller_id,
 			        :to => number,
