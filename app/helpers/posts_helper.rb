@@ -287,9 +287,12 @@ module PostsHelper
 		http = Curl.get(base_uri)
 		json_body = JSON.parse(http.body_str)
 		topics = json_body['RelatedTopics']
-		message = ''
-		topics.each do |t|
+		message = 'Possible Answers'
+		topics.each.with_index do |t,ind|
+			message += (ind+1).to_s
+			message += ") "
 			message += topic['Text']
+			message += "\n"
 		end
 		message
 	end
