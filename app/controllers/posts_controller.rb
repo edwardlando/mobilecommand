@@ -54,7 +54,7 @@ class PostsController < ApplicationController
         :body => @body
         )  
 
-      text = body.split(" ")
+      text = @body.split(" ")
       if (text[0] == "NYT")
         textback = ''
         textback = nyt(text[1])
