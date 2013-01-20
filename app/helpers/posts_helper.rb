@@ -3,6 +3,30 @@ module PostsHelper
 	def espn(second)
 		key = 'qzbm6t893h5t4va7uctshvrq'
 		shared_secret = 'mRteyUnpcucyvrMm3ubsvYDn'
+		if (second == "TOP")
+			base_uri = 'http://api.espn.com/v1/fantasy/football/news?apikey=qzbm6t893h5t4va7uctshvrq'
+			http = Curl.get(base_uri)
+			json_body = JSON.parse(http.body_str)
+			headlines = json_body['headlines']
+			top_titles = []
+			headlines.each.with_index do |headline,ind|
+				if (ind < 6)
+					top_titles.push(headline['title'])
+				end
+			end
+			puts top_titles
+			textback = "Top ESPN stories today:\n"
+			top_titles.each.with_index do |title,ind|
+				textback += ((ind+1).to_s)
+				textback += ") "
+				textback += title 
+				textback += "\n"
+			end		
+			textback += "mblmstr://espn/top"
+			puts textback
+			return textback	
+
+		end
 	end
 
 	def nyt(second)
@@ -21,7 +45,7 @@ module PostsHelper
 			end
 
 			puts top_titles
-			textback = "Top stories today:\n" 
+			textback = "Top NYT stories today:\n" 
 			top_titles.each.with_index do |title,ind|
 				textback += ((ind+1).to_s)
 				textback += ") "
@@ -107,7 +131,8 @@ module PostsHelper
 				client.account.sms.messages.create(
 			        :from => caller_id,
 			        :to => number,
-			        :body => message )  			
+			        :body => message )  
+			     sleep(0.1)			
 			end
 		end
 	end

@@ -57,7 +57,10 @@ class PostsController < ApplicationController
         puts "in the nyt loop"
         puts textback
         send_message(textback,@to)
-
+      elsif (text[0] == "ESPN")
+        textback = ''
+        textback = espn(text[1])
+        send_message(textback,@to)
       end
 
 
