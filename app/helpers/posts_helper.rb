@@ -1,5 +1,10 @@
 module PostsHelper
 
+	def espn(second)
+		key = 'qzbm6t893h5t4va7uctshvrq'
+		shared_secret = 'mRteyUnpcucyvrMm3ubsvYDn'
+	end
+
 	def nyt(second)
 		base_uri = ""
 		if (second == "TOP")
@@ -24,7 +29,7 @@ module PostsHelper
 				textback += "\n"
 			end
 
-			textback += "\nmblmstr://nyt/top"
+			textback += "mblmstr://nyt/top"
 			puts textback
 			return textback
 		elsif (second = "BUS")
@@ -49,8 +54,6 @@ module PostsHelper
 				textback += "\n"
 			end
 
-			o =  [('a'..'z')].map{|i| i.to_a}.flatten
-			shortcode  =  (0...3).map{ o[rand(o.length)] }.join
 			textback += "mblmstr://nyt/bus"
 			puts textback
 			return textback
@@ -92,7 +95,7 @@ module PostsHelper
 
       	client = Twilio::REST::Client.new(account_sid,account_token)
 
-		if (text.length <= 155)
+		if (text.length <= 160)
 			client.account.sms.messages.create(
 			        :from => caller_id,
 			        :to => number,
@@ -100,7 +103,7 @@ module PostsHelper
 		else
 			chars_sent = 0
 			while (chars_sent+1 < text.length)
-				message = text[chars_sent..chars_sent+=155]
+				message = text[chars_sent..chars_sent+=160]
 				client.account.sms.messages.create(
 			        :from => caller_id,
 			        :to => number,
