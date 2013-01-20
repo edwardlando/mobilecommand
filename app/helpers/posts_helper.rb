@@ -19,11 +19,11 @@ module PostsHelper
 			end
 
 			puts top_titles
-			textback = "Top stories today:\n" + "1) " + top_titles[0]+"\n" +  "2)" + top_titles[1]+"\n" +"3)" + top_titles[2]
+			textback = "Top stories today:\n" + "1) " + top_titles[0]+"\n" +  "2) " + top_titles[1]+"\n" +"3) " + top_titles[2]
 
 			o =  [('a'..'z')].map{|i| i.to_a}.flatten
 			shortcode  =  (0...3).map{ o[rand(o.length)] }.join
-			textback += ("\nNYT/"+shortcode)
+			textback += "\nmblmstr://NYT/top"
 			puts textback
 			return textback
 		elsif (second == "1")
