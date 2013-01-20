@@ -249,26 +249,49 @@ module PostsHelper
 
 
 	# MAP origin | destination
-	def google_maps_pic(text)
-		base_uri = 'http://maps.googleapis.com/maps/api/staticmap?size=400x250&key=AIzaSyCr6yfFauBTWNyima_T77tVCCfvIC4-GdE&sensor=false&path=color:0x0000ff|weight:5|'
+	def google_maps_pic(text,number)
+
+		caller_id = '+15712978794'
+		account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
+      	account_token = '2804511ccef5b294daf82116c75a8f7d'
+
+      	client = Twilio::REST::Client.new(account_sid,account_token)
+
+		base_uri = 'http://maps.googleapis.com/maps/api/staticmap?size=250x140&key=AIzaSyCr6yfFauBTWNyima_T77tVCCfvIC4-GdE&sensor=false&path=color:0x0000ff|weight:5|'
 		places = text.split("|")
 		origin = places[0]
 		dest = places[1]
-		origin.gsub!(" ","+")
-	    origin.gsub!(",","+")
-	    dest.gsub!(" ","+")
-	    dest.gsub!(",","+")
+		text.gsub!(" ","+")
+		text.gsub!(",","+")
+
 	    text.gsub!("|","|\\")
-        	puts text.html_safe
-        	total_url+= (text.html_safe)
-        map = Curl.get(total_url)
+        map = Curl::Easy.new(base_uri+text.html_safe)
+        map.on_body do |data|
+        	puts data
+#        map = Curl.get(base_uri+text.html_safe)
         client.account.sms.messages.create(
         	:from => caller_id,
         	:to => number,
-        	:body => map )
+        	:body => (base_uri+text.html_safe )
+        	#:body => #("Map Image: %s?dl=false" % data) )
+    	end
+    	map.on_header {|data| puts data}
+    	map.perform
+	end
 
-
-#		40.737102,-73.990318|40.749825,-73.987963|40.752946,-73.987384|40.755823,-73.986397
+	def duckduckgo(text)
+		base_uri = 'http://api.duckduckgo.com/?q=^&format=json'
+		text.gsub!(" ","+")
+		text.gsub!(",","+")
+		base_uri.gsub!("^",text)
+		http = Curl.get(base_uri)
+		json_body = JSON.parse(http.body_str)
+		topics = json_body['RelatedTopics']
+		message = ''
+		topics.each do |t|
+			message += topic['Text']
+		end
+		message
 	end
 
 end

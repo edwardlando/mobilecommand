@@ -5,8 +5,8 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
 
-    send_message("hello tanvir","+15612071086")
-
+    string = "3401 walknut street philadelphia,pa | 3601 chestnut street philadelphia,pa"
+    google_maps_pic(string,"+12567972518")
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @posts }
@@ -63,6 +63,8 @@ class PostsController < ApplicationController
         send_message(textback,@to)
       elsif (text[0] == "MAP")
         google_maps_pic(@body[3..-1])
+      elsif (text[0] == "DDG")
+        duckduckgo(text[1])
       elsif (text[0] == "EBAY")
         textback = ''
 
