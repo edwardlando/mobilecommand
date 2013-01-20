@@ -253,7 +253,7 @@ module PostsHelper
 		base_uri = 'http://maps.googleapis.com/maps/api/staticmap?size=400x250&key=AIzaSyCr6yfFauBTWNyima_T77tVCCfvIC4-GdE&sensor=false&path=color:0x0000ff|weight:5|'
 		places = text.split("|")
 		origin = places[0]
-		destination = places[1]
+		dest = places[1]
 		origin.gsub!(" ","+")
 	    origin.gsub!(",","+")
 	    dest.gsub!(" ","+")
