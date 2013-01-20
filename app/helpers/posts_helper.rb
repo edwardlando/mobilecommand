@@ -258,14 +258,9 @@ module PostsHelper
 	    origin.gsub!(",","+")
 	    dest.gsub!(" ","+")
 	    dest.gsub!(",","+")
-	    map_data = ''
-	    if origin.nil?
-        	return "Sorry, wrong origin address!"
-      	elsif dest.nil?
-        	return "Sorry, wrong destination address!"
-        else
-        	total_url+= (origin.html_safe + "|\\" + dest.html_safe)
-        end
+	    text.gsub!("|","|\\")
+        	puts text.html_safe
+        	total_url+= (text.html_safe)
         map = Curl.get(total_url)
         client.account.sms.messages.create(
         	:from => caller_id,
