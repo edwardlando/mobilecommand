@@ -293,18 +293,17 @@ module PostsHelper
 	end
 
 		def get_directions(origin,dest,from)
-    begin
     arr = Array.new
+    msg = ''
     origin.gsub!(" ","+")
     origin.gsub!(",","+")
     dest.gsub!(" ","+")
     dest.gsub!(",","+")
+    uri = "http://maps.googleapis.com"
     map_data = ''
-    uri = URI(MapURL)
-    Net::HTTP.start(uri.host,80) { |http| 
-      req = Curl.get('/maps/api/geocode/json?address=' + origin.html_safe + '&sensor=false')
+      req = Curl.get(uri + '/maps/api/geocode/json?address=' + origin.html_safe + '&sensor=false')
       origin = JSON.parse(req.body_str)['results']
-      req = Curl.get('/maps/api/geocode/json?address=' + dest.html_safe + '&sensor=false')
+      req = Curl.get(uri + '/maps/api/geocode/json?address=' + dest.html_safe + '&sensor=false')
       dest = JSON.parse(req.body_str)['results']
       if origin.nil?
         send_message("Invalid origin",from)
@@ -317,32 +316,41 @@ module PostsHelper
         dest_lng = dest['lng']
         origin_lat = origin['lat']
         origin_lng = origin['lng']
-        params = ('/maps/api/directions/json?origin=' + origin_lat.to_s + "," +origin_lng.to_s + '&destination=' + dest_lat.to_s + "," + dest_lng.to_s + '&sensor=false').html_safe
-        req = Net::HTTP::Get.new(params)
-        map_data = JSON.parse(http.request(req).body)['routes'][0]['legs'][0]['steps']
+        params = (uri + '/maps/api/directions/json?origin=' + origin_lat.to_s + "," +origin_lng.to_s + '&destination=' + dest_lat.to_s + "," + dest_lng.to_s + '&sensor=false').html_safe
+        req = Curl.get(params)
+        map_data = JSON.parse(req.body_str)['routes'][0]['legs'][0]['steps']
  
       end
-    }
-    map_data.each { |step| 
+    map_data.each do |step| 
       h = Hash.new
       puts step
       instr = step['html_instructions']
       dist_string = step['distance']['text']
-      if step.nil? || step['distance'].nil?
-        puts "STEP IS NIL!"
-     end
+
       instr.gsub!("<b>","")
       instr.gsub!("</b>","")
       instr=instr.split("<div")[0]
       h['instructions'] = instr
       h['distance'] = dist_string
+      puts "WHAT"
+      puts h['instructions']
+      puts h['distance']
+      puts "KEOFK"
       arr.push(h)
-      msg = arr.join("\n")
-    }
-    msg   
-  rescue
-    send_message("Sorry, be more specific!",from)
-  end
+
+
+    #  puts msg
+    end
+          msg+="Directions:\n"
+          arr.each.with_index do |point,ind|
+      	curr = ''
+      	curr+=((ind+1).to_s+") ")
+      	curr+=(point['distance'].to_s+" ")
+      	curr+=(point['instructions']+"\n")
+      	msg+=curr
+     # 	msg+=curr[0..(curr.length/2)]
+      end
+    msg  
   end
 
 	def duckduckgo(text)
@@ -353,12 +361,18 @@ module PostsHelper
 		http = Curl.get(base_uri)
 		json_body = JSON.parse(http.body_str)
 		topics = json_body['RelatedTopics']
-		message = 'Possible Answers'
+		message = 'Possible Answers\n'
+		puts topics
 		topics.each.with_index do |t,ind|
-			message += (ind+1).to_s
-			message += ") "
-			message += t['Text']
-			message += "\n"
+			if (t['Text'] != nil)
+				puts t['Text']
+				message += (ind+1).to_s
+				message += ") "
+				message += t['Text']
+				message += "\n"
+			else
+				break
+			end
 		end
 		message
 	end

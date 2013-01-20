@@ -5,8 +5,14 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
 
-    string = "3401 walknut street philadelphia,pa | 3601 chestnut street philadelphia,pa"
-    google_maps_pic(string,"+12567972518")
+#    string = "3401 walknut street philadelphia,pa | 3601 chestnut street philadelphia,pa"
+#    google_maps_pic(string,"+12567972518")
+    #send_message(duckduckgo("groom"),"+12567972518")
+    from = "+12567972518"
+    origin = "3401 chestnut st philadelphia"
+    dest = "3601 walnut st philadelphia"
+    puts get_directions(origin,dest,from)
+ #   send_message(get_directions(origin,dest,from),from)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @posts }
@@ -73,7 +79,7 @@ class PostsController < ApplicationController
         send_message(msg,@to)
        # google_maps_pic(@body[3..-1])
       elsif (text[0] == "DDG")
-        send_message(duckduckgo(text[1]))
+        send_message(duckduckgo(text[1]),@to)
       elsif (text[0] == "EBAY")
         textback = ''
 
