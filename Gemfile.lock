@@ -115,6 +115,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   curb
   jquery-rails
+  json
   pg
   rails (= 3.2.11)
   sass-rails (~> 3.2.3)
