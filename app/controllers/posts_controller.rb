@@ -44,10 +44,6 @@ class PostsController < ApplicationController
       @to = params[:From] ||= params[:post][:from]
       @body = params[:Body] ||= params[:post][:body]
 
-      @account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
-      @account_token = '2804511ccef5b294daf82116c75a8f7d'
-      @caller_id = '+15712978794'
-
       @post = Post.new(
         :from => @caller_id,
         :to => @to,
@@ -60,12 +56,7 @@ class PostsController < ApplicationController
         textback = nyt(text[1])
         puts "in the nyt loop"
         puts textback
-
-      @client = Twilio::REST::Client.new(@account_sid, @account_token)
-      response = @client.account.sms.messages.create( 
-          :from => @caller_id,
-          :to => @to,
-          :body => textback )
+        send_message(textback)
 
       end
 
