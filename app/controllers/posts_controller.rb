@@ -1,8 +1,11 @@
 class PostsController < ApplicationController
   # GET /posts
+  include PostsHelper
   # GET /posts.json
   def index
     @posts = Post.all
+
+    nyt("TOP")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -30,6 +33,7 @@ class PostsController < ApplicationController
   # GET /posts/1/edit
   def edit
     @post = Post.find(params[:id])
+    nyt("TOP")
   end
 
   # POST /posts
@@ -37,31 +41,38 @@ class PostsController < ApplicationController
   def create
     if request.post?
 
-    @to = params[:From] ||= params[:post][:from]
-    @body = params[:Body] ||= params[:post][:body]
+      @to = params[:From] ||= params[:post][:from]
+      @body = params[:Body] ||= params[:post][:body]
 
-    @account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
-    @account_token = '2804511ccef5b294daf82116c75a8f7d'
-    @caller_id = '+15712978794'
-  
-    @post = Post.new(
-      :from => @caller_id,
-      :to => @to,
-      :body => @body
-    )  
+      @account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
+      @account_token = '2804511ccef5b294daf82116c75a8f7d'
+      @caller_id = '+15712978794'
+      
+      @post = Post.new(
+        :from => @caller_id,
+        :to => @to,
+        :body => @body
+        )  
 
-    @client = Twilio::REST::Client.new(@account_sid, @account_token)
-    response = @client.account.sms.messages.create( 
-      :from => @caller_id,
-      :to => @to,
-      :body => @body
-    )  
+      text = body.split(" ");
+      if (text[0] == "NYT")
+        @client = Twilio::REST::Client.new(@account_sid, @account_token)
+        response = @client.account.sms.messages.create( 
+          :from => @caller_id,
+          :to => @to,
+          :body =>  nyt(text[1])
+          )  
 
-    @post.save 
+      end
 
-    render 'index'
+
+
+
+      @post.save 
+
+      render 'index'
+    end
   end
-end
 
 
   # PUT /posts/1
