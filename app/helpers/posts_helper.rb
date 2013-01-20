@@ -172,6 +172,8 @@ module PostsHelper
         	return "Sorry, wrong origin address!"
       	elsif dest.nil?
         	return "Sorry, wrong destination address!"
+        else
+        	total_url+= (origin.html_safe + "|\\" + dest.html_safe)
         end
 
 #		40.737102,-73.990318|40.749825,-73.987963|40.752946,-73.987384|40.755823,-73.986397
