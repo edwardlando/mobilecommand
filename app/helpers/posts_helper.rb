@@ -2,6 +2,7 @@ module PostsHelper
 
 	def nyt(second)
 		if (second == "TOP")
+			base_uri = "http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key=39186a552e64bb003eb882b3a7486aba:10:67206205"
 
 			http = Curl.get(base_uri)
 
