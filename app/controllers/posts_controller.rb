@@ -74,6 +74,8 @@ class PostsController < ApplicationController
       elsif (text[0] == "MAP")
         places = text[3..-1]
         pl_arr = places.split("|")
+        puts "ORIGIN IS #{pl_arr[0]}"
+        puts "DEST IS #{pl_arr[1]}"
         msg = get_directions(pl_arr[0],pl_arr[1],@to)
         puts msg
         send_message(msg,@to)
