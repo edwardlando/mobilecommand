@@ -95,6 +95,97 @@ module PostsHelper
 		end
 	end
 
+	def ebay(second, third) # avg price for this item on ebay when you type in the name
+		# demo popular gift ideas for boys
+		#devid = '608eb297-070b-4eab-8e24-79cca0ee7f71'
+		#appid = 'EdwardLa-31d7-4979-ac0b-73b558ce7237'
+		appid = 'eBayinc2e-d3b4-4a21-a765-47cc6b01cf7'
+		#certid = '2d365e22-5625-4015-b178-d84bb1b3d107'
+
+		if (second == "POP")
+
+            base_uri = "http://open.api.ebay.com/shopping?"
+		    base_uri += "callname=FindPopularItems&"
+		    base_uri += "responseencoding=JSON&"
+		    base_uri += "appid="+appid+"&"
+		    base_uri += "siteid=0&"
+		    base_uri += "version=531&"
+		    base_uri += "QueryKeywords="+third
+
+
+=begin
+   http://open.api.ebay.com/shopping?callname=FindPopularItems&responseencoding=JSON&appid=eBayinc2e-d3b4-4a21-a765-47cc6b01cf7&siteid=0&version=531&QueryKeywords=harry%20original
+   http://open.api.ebay.com/shopping?
+   callname=FindPopularItems&
+   responseencoding=XML&
+   appid=YourAppIDHere&
+   siteid=0&
+   version=531&
+   QueryKeywords=harry%20original
+=end
+
+		elsif (second == "PRICE")
+			# max, min and avg
+			
+			base_uri = "http://svcs.ebay.com/services/search/FindingService/v1"
+		    base_uri += "?OPERATION-NAME=findItemsByKeywords"
+		    base_uri += "&SERVICE-VERSION=1.0.0"
+		    base_uri += "&SECURITY-APPNAME="+appid
+		    base_uri += "&GLOBAL-ID=EBAY-US"
+		    base_uri += "&RESPONSE-DATA-FORMAT=JSON"
+		    base_uri += "&callback=_cb_findItemsByKeywords"
+		    base_uri += "&REST-PAYLOAD"
+		    base_uri += "&keywords="+third
+		    base_uri += "&paginationInput.entriesPerPage=20"
+
+		    http = Curl.get(base_uri)
+			json_body = JSON.parse(http.body_str)
+			results = json_body['searchResult']
+
+			total_price = 0
+			
+			count = results['findItemsByKeywords']['searchResult']['@count']
+			results = results['findItemsByKeywords']['searchResult']['item']
+
+			min_price = results['sellingStatus']['currentPrice']['__value__'])
+			max_price = results['sellingStatus']['currentPrice']['__value__'])
+			
+			results.each do |res|	
+				current_price = res['sellingStatus']['currentPrice']['__value__'])
+
+				if (min_price > current_price) 
+					min_price = current_price
+				end
+
+				if (max_price < current_price)
+					max_price = current_price
+				end
+
+				total_price += current_price
+			end
+
+			average = total_prices/count
+			
+
+			textback = "Current prices for " + third + " on eBay:\n"
+			textback += "Minimum price: $" + number_with_precision(min_price, :precision => 2) + "\n"
+			textback += "Average price: $" + number_with_precision(average, :precision => 2) + "\n"
+			textback += "Maximum price: $" + number_with_precision(max_price, :precision => 2) + "\n"
+			textback += "mblmstr://ebay/popular/" + (rand() * 10).to_i + (rand() * 10).to_i + (rand() * 10).to_i
+			puts textback
+			return textback	
+		end
+			
+		
+=begin
+		    http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0
+		    &SECURITY-APPNAME=eBayinc2e-d3b4-4a21-a765-47cc6b01cf7&GLOBAL-ID=EBAY-US&RESPONSE-DATA-FORMAT=JSON
+		    &callback=_cb_findItemsByKeywords&REST-PAYLOAD&keywords=harry%20potter&paginationInput.entriesPerPage=3
+=end
+
+
+	end
+
 	def article_request(num)
 			base_uri = "http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key=39186a552e64bb003eb882b3a7486aba:10:67206205"
 
