@@ -141,7 +141,7 @@ module PostsHelper
 			arr.each do |word|
 				if ((chars_in_msg+word.length) < ( char_so_far.modulo(160)))
 					chars_in_msg+=(word.length+1)
-					char_so_far+=(word.length+1)
+					chars_so_far+=(word.length+1)
 					message += "#{word} "
 				else
 					client.account.sms.messages.create(
