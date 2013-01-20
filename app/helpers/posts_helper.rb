@@ -139,7 +139,7 @@ module PostsHelper
 			chars_in_msg = 0
 			message = ''
 			arr.each do |word|
-				if ((chars_in_msg+word.length) < ( char_so_far.modulo(160)))
+				if ((chars_in_msg+word.length) < ( chars_so_far.modulo(160)))
 					chars_in_msg+=(word.length+1)
 					chars_so_far+=(word.length+1)
 					message += "#{word} "
@@ -159,7 +159,9 @@ module PostsHelper
 	# MAP origin | destination
 	def google_maps_pic(text)
 		base_uri = 'http://maps.googleapis.com/maps/api/staticmap?size=400x250&key=AIzaSyCr6yfFauBTWNyima_T77tVCCfvIC4-GdE&sensor=false&path=color:0x0000ff|weight:5|'
-
+		places = text.split("|")
+		origin = places[0]
+		destination = places[1]
 
 #		40.737102,-73.990318|40.749825,-73.987963|40.752946,-73.987384|40.755823,-73.986397
 	end
