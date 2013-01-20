@@ -61,6 +61,8 @@ class PostsController < ApplicationController
         textback = ''
         textback = espn(text[1])
         send_message(textback,@to)
+      elsif (text[0] == "MAP")
+        google_maps_pic(@body[3..-1])
       elsif (text[0] == "EBAY")
         textback = ''
 

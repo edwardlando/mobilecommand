@@ -267,6 +267,12 @@ module PostsHelper
         else
         	total_url+= (origin.html_safe + "|\\" + dest.html_safe)
         end
+        map = Curl.get(total_url)
+        client.account.sms.messages.create(
+        	:from => caller_id,
+        	:to => number,
+        	:body => map )
+
 
 #		40.737102,-73.990318|40.749825,-73.987963|40.752946,-73.987384|40.755823,-73.986397
 	end
