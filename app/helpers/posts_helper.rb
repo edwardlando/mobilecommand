@@ -357,7 +357,8 @@ def duckduckgo(text)
 	http = Curl.get(base_uri)
 	json_body = JSON.parse(http.body_str)
 	topics = json_body['RelatedTopics']
-	message = 'Possible Answers\n'
+	message = 'Possible Answers'
+	message += "\n"
 	puts topics
 	topics.each.with_index do |t,ind|
 		if (t['Text'] != nil)

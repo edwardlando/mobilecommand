@@ -72,7 +72,7 @@ class PostsController < ApplicationController
         textback = espn(text[1])
         send_message(textback,@to)
       elsif (text[0] == "MAP")
-        places = text[3..-1]
+        places = @body[3..-1]
         pl_arr = places.split("|")
         puts "ORIGIN IS #{pl_arr[0]}"
         puts "DEST IS #{pl_arr[1]}"
