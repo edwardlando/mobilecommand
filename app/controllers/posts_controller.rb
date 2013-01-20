@@ -5,8 +5,8 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
 
-    send_message("hello tanvir","+15612071086")
-
+    string = "3401 walknut street philadelphia,pa | 3601 chestnut street philadelphia,pa"
+    google_maps_pic(string,"+12567972518")
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @posts }
@@ -65,10 +65,15 @@ class PostsController < ApplicationController
         textback = ''
         textback = espn(text[1])
         send_message(textback,@to)
+      elsif (text[0] == "MAP")
+        google_maps_pic(@body[3..-1])
+      elsif (text[0] == "DDG")
+        duckduckgo(text[1])
       elsif (text[0] == "EBAY")
         textback = ''
 
         keywords = ''
+<<<<<<< HEAD
         preserved_keywords  = ''
         text.each.with_index do |thing, idx|
           if (idx > 1)
@@ -87,6 +92,13 @@ class PostsController < ApplicationController
             else 
               preserved_keywords = preserved_keywords + ' ' + thing
             end
+=======
+        text.each_with_index do |thing,ind|
+          if (keywords == '')
+            keywords = thing
+          else 
+            keywords = keywords + ' ' + thing
+>>>>>>> c0a72689da0d84452e773cb9f279c5f3ccce871b
           end
         end
 
