@@ -61,10 +61,21 @@ class PostsController < ApplicationController
         textback = ''
         textback = espn(text[1])
         send_message(textback,@to)
+      elsif (text[0] == "EBAY")
+        textback = ''
+
+        keywords = ''
+        text.each_with_index do |thing,2|
+          if (keywords == '')
+            keywords = thing
+          else 
+            keywords = keywords + ' ' + thing
+          end
+        end
+
+        textback = ebay(text[1], keywords) #second and third
+        send_message(textback,@to)
       end
-
-
-
 
       @post.save 
 
