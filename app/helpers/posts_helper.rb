@@ -1,4 +1,6 @@
 module PostsHelper
+	
+	require 'open-uri'
 	include ActionView::Helpers::NumberHelper
 
 	def espn(second)
@@ -217,10 +219,6 @@ end
 
 	def send_message(text,number)
 
-		p '*******TEXT************'
-		p text
-		p '*******TEXT************'
-
 		caller_id = '+15712978794'
 		account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
 		account_token = '2804511ccef5b294daf82116c75a8f7d'
@@ -279,10 +277,16 @@ end
 		text.gsub!(",","+")
 
 		text.gsub!("|","|\\")
+		url = base_uri+text.html_safe
+		open(url) do |f|
+			File.open(f,"wb") do |file|
+				body = file
+			end
+		end
 		client.account.sms.messages.create(
 			:from => caller_id,
 			:to => number,
-			:body => base_uri+text.html_safe )
+			:body => body )
 
 	end
 
