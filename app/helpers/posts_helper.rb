@@ -43,7 +43,7 @@ module PostsHelper
 			puts top_titles
 			textback = "Top stories today:\n" 
 			top_titles.each.with_index do |title,ind|
-				textback+=""+ind+") " + title + "\n"
+				textback+=(ind+") " + title + "\n")
 			end
 #			textback+=+ "1) " + top_titles[0]+"\n" +  "2) " + top_titles[1]+"\n" +"3) " + top_titles[2]
 
