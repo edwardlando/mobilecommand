@@ -78,7 +78,6 @@ class PostsController < ApplicationController
         textback = ''
 
         keywords = ''
-<<<<<<< HEAD
         preserved_keywords  = ''
         text.each.with_index do |thing, idx|
           if (idx > 1)
@@ -97,13 +96,6 @@ class PostsController < ApplicationController
             else 
               preserved_keywords = preserved_keywords + ' ' + thing
             end
-=======
-        text.each_with_index do |thing,ind|
-          if (keywords == '')
-            keywords = thing
-          else 
-            keywords = keywords + ' ' + thing
->>>>>>> c0a72689da0d84452e773cb9f279c5f3ccce871b
           end
         end
 
