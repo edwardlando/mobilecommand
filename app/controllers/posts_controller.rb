@@ -5,13 +5,13 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
 
-#    string = "3401 walknut street philadelphia,pa | 3601 chestnut street philadelphia,pa"
-#    google_maps_pic(string,"+12567972518")
+    string = "3401 walknut street philadelphia,pa | 3601 chestnut street philadelphia,pa"
+    google_maps_pic(string,"+12567972518")
     #send_message(duckduckgo("groom"),"+12567972518")
-    from = "+12567972518"
+#    from = "+12567972518"
     origin = "3401 chestnut st philadelphia"
     dest = "3601 walnut st philadelphia"
-    puts get_directions(origin,dest,from)
+#    puts get_directions(origin,dest,from)
  #   send_message(get_directions(origin,dest,from),from)
     respond_to do |format|
       format.html # index.html.erb
@@ -72,7 +72,7 @@ class PostsController < ApplicationController
         textback = espn(text[1])
         send_message(textback,@to)
       elsif (text[0] == "MAP")
-        places = text[3..-1]
+        places = @body[3..-1]
         pl_arr = places.split("|")
         puts "ORIGIN IS #{pl_arr[0]}"
         puts "DEST IS #{pl_arr[1]}"
