@@ -323,6 +323,7 @@ module PostsHelper
       	msg+=curr
      # 	msg+=curr[0..(curr.length/2)]
       end
+    puts "MESSAGE DIRS IS #{msg}"
     msg  
   end
 
@@ -347,6 +348,7 @@ module PostsHelper
 				break
 			end
 		end
+		puts "Message is #{message}"
 		message
 	end
 end
