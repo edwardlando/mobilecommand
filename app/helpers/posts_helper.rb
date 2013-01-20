@@ -266,10 +266,10 @@ module PostsHelper
     map_data = ''
     uri = URI(MapURL)
     Net::HTTP.start(uri.host,80) { |http| 
-      req = Net::HTTP::Get.new('/maps/api/geocode/json?address=' + origin.html_safe + '&sensor=false')
-      origin = JSON.parse(http.request(req).body)['results']
-      req = Net::HTTP::Get.new('/maps/api/geocode/json?address=' + dest.html_safe + '&sensor=false')
-      dest = JSON.parse(http.request(req).body)['results']
+      req = Curl.get('/maps/api/geocode/json?address=' + origin.html_safe + '&sensor=false')
+      origin = JSON.parse(req.body_str)['results']
+      req = Curl.get('/maps/api/geocode/json?address=' + dest.html_safe + '&sensor=false')
+      dest = JSON.parse(req.body_str)['results']
       if origin.nil?
         send_message("Invalid origin",from)
       elsif dest.nil?
@@ -305,11 +305,7 @@ module PostsHelper
     }
     msg   
   rescue
-    response = @client.account.sms.messages.create(
-     :from => CALLER_ID,
-     :to => @post.from,
-     :body => "Please be more specific! we're working on this"
-     )
+    send_message("Sorry, be more specific!",from)
   end
   end
 
@@ -325,7 +321,7 @@ module PostsHelper
 		topics.each.with_index do |t,ind|
 			message += (ind+1).to_s
 			message += ") "
-			message += topic['Text']
+			message += t['Text']
 			message += "\n"
 		end
 		message
