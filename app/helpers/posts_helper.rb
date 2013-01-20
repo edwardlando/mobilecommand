@@ -56,7 +56,7 @@ module PostsHelper
 			textback += "mblmstr://nyt/top"
 			puts textback
 			return textback
-		elsif (second = "BUS")
+		elsif (second == "BUS")
 			base_uri = "http://api.nytimes.com/svc/mostpopular/v2/mostshared/business/1.json?api-key=39186a552e64bb003eb882b3a7486aba:10:67206205"
 			http = Curl.get(base_uri)
 
