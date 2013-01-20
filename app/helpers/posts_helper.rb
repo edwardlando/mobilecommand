@@ -10,7 +10,7 @@ module PostsHelper
 			headlines = json_body['headlines']
 			top_titles = []
 			headlines.each.with_index do |headline,ind|
-				if (ind < 6)
+				if (ind < 4)
 					top_titles.push(headline['title'])
 				end
 			end
@@ -39,7 +39,7 @@ module PostsHelper
 			results = json_body['results']
 			top_titles = []
 			results.each.with_index do |res, ind|
-				if (ind < 6)
+				if (ind < 4)
 					top_titles.push(res['title'])
 				end
 			end
@@ -64,7 +64,7 @@ module PostsHelper
 			results = json_body['results']
 			top_titles = []
 			results.each.with_index do |res, ind|
-				if (ind < 6)
+				if (ind < 4)
 					top_titles.push(res['title'])
 				end
 			end
