@@ -100,6 +100,8 @@ class PostsController < ApplicationController
         end
 
         textback = ebay(text[1], keywords, preserved_keywords) #second and third
+
+        p textback
         send_message(textback,@to)
       end
 

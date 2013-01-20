@@ -104,18 +104,41 @@ module PostsHelper
 		appid = 'eBayinc2e-d3b4-4a21-a765-47cc6b01cf7'
 		#certid = '2d365e22-5625-4015-b178-d84bb1b3d107'
 
-		if (second == "POP")
+		if (second == "POPULAR")
 
-            base_uri = "http://open.api.ebay.com/shopping?"
-		    base_uri += "callname=FindPopularItems&"
-		    base_uri += "responseencoding=JSON&"
-		    base_uri += "appid="+appid+"&"
-		    base_uri += "siteid=0&"
-		    base_uri += "version=531&"
-		    base_uri += "QueryKeywords="+third
+			if (third == "FOR MEN")
+				cats = [15032, 58058, 293, 11232, 220, 1249]
+			else
+				cats = [20081, 550, 2984, 11450, 14339, 237, 26395, 11700, 281]				
+			end
 
+			category_id = cats.sample
 
+			#base_uri = "http://ql.io/q?s=create%20table%20shoppingAPI%20on%20select%20get%20from%20%22http%3A%2F%2Fopen.api.ebay.com%2Fshopping%3Fcallname%3DFindPopularItems%26responseencoding%3DJSON%26appid%3DeBayinc2e-d3b4-4a21-a765-47cc6b01cf7%26CategoryID%3D" + category_id.to_s + "%26siteid%3D0%26version%3D531%22%3B%0A%0Aresult%20%3D%20select%20%22ItemArray.Item..Title%22%20from%20shoppingAPI%3B%0A%0Areturn%20%7B%22result%22%3A%22%7Bresult%7D%22%7D"
+			base_uri = "http://ql.io/q?s=create%20table%20shoppingAPI%20on%20select%20get%20from%20%22http%3A%2F%2Fopen.api.ebay.com%2Fshopping%3Fcallname%3DFindPopularItems%26responseencoding%3DJSON%26appid%3DeBayinc2e-d3b4-4a21-a765-47cc6b01cf7%26CategoryID%3D11232%26siteid%3D0%26version%3D531%22%3B%0A%0Aresult%20%3D%20select%20%22ItemArray.Item..Title%22%20from%20shoppingAPI%3B%0A%0Areturn%20%7B%22result%22%3A%22%7Bresult%7D%22%7D"
 
+		    p '**********'
+		    p base_uri
+		    p '**********'
+
+			http = Curl.get(base_uri)
+			json_body = JSON.parse(http.body_str) 
+
+			json_body = json_body['result'][0]
+
+			p json_body
+
+			textback = "Some popular gift ideas " + third.downcase + " from eBay:\n"
+
+			counter = 1
+			json_body[0...4].each do |res|
+				textback += counter.to_s + ") " + res.titleize + "\n"
+				counter += 1
+			end
+
+			textback += "mblmstr://ebay/popular/" + (0...4).map{ ('a'..'z').to_a[rand(26)] }.join
+
+			return textback	
 		elsif (second == "PRICE")
 			# max, min and avg
 
@@ -162,7 +185,7 @@ module PostsHelper
 			textback += "Minimum price: $" + number_with_precision(min_price, :precision => 2) + "\n"
 			textback += "Average price: $" + number_with_precision(average, :precision => 2) + "\n"
 			textback += "Maximum price: $" + number_with_precision(max_price, :precision => 2) + "\n"
-			textback += "mblmstr://ebay/popular/" + (0...4).map{ ('a'..'z').to_a[rand(26)] }.join
+			textback += "mblmstr://ebay/price/" + (0...4).map{ ('a'..'z').to_a[rand(26)] }.join
 			puts textback
 			return textback	
 		end
@@ -200,6 +223,10 @@ module PostsHelper
 
 	def send_message(text,number)
 
+		p '*******TEXT************'
+		p text
+		p '*******TEXT************'
+
 		caller_id = '+15712978794'
 		account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
       	account_token = '2804511ccef5b294daf82116c75a8f7d'
@@ -220,9 +247,9 @@ module PostsHelper
 			message = ''
 			arr.each do |word|
 
-				if ((chars_in_msg+word.length) < ( chars_so_far.modulo(160)))
+				#if ((chars_in_msg+word.length) < ( chars_so_far.modulo(160)))
 
-				#if ((chars_in_msg+word.length) < 160)
+				if ((chars_in_msg+word.length) < 160)
 
 					chars_in_msg+=(word.length+1)
 					chars_so_far+=(word.length+1)
