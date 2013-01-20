@@ -66,9 +66,14 @@ class PostsController < ApplicationController
         textback = espn(text[1])
         send_message(textback,@to)
       elsif (text[0] == "MAP")
-        google_maps_pic(@body[3..-1])
+        places = text[3..-1]
+        pl_arr = places.split("|")
+        msg = get_directions(pl_arr[0],pl_arr[1],@to)
+        puts msg
+        send_message(msg,@to)
+       # google_maps_pic(@body[3..-1])
       elsif (text[0] == "DDG")
-        duckduckgo(text[1])
+        send_message(duckduckgo(text[1]))
       elsif (text[0] == "EBAY")
         textback = ''
 
