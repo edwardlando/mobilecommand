@@ -51,11 +51,11 @@ module PostsHelper
 
 	def send_message(text)
 
-		CALLER_ID = '+15712978794'
-		ACCOUNT_SID = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
-      	ACCOUNT_TOKEN = '2804511ccef5b294daf82116c75a8f7d'
+		@CALLER_ID = '+15712978794'
+		@ACCOUNT_SID = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
+      	@ACCOUNT_TOKEN = '2804511ccef5b294daf82116c75a8f7d'
 
-      	client = Twilio::REST::Client.new(ACCOUNT_SID,ACCOUNT_TOKEN)
+      	@client = Twilio::REST::Client.new(ACCOUNT_SID,ACCOUNT_TOKEN)
 
 		if (text.length <= 145)
 			@client.account.sms.messages.create(
@@ -66,7 +66,7 @@ module PostsHelper
 			chars_sent = 0
 			while (chars_sent+1 < text.length)
 				message = text[chars_sent..chars_sent+=145]
-				client.account.sms.messages.create(
+				@client.account.sms.messages.create(
 			        :from => CALLER_ID,
 			        :to => @post.from,
 			        :body => message )  			
