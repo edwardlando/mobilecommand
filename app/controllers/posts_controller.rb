@@ -5,7 +5,7 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
 
-    nyt("TOP")
+    send_message("hello tanvir","+15612071086")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -56,7 +56,7 @@ class PostsController < ApplicationController
         textback = nyt(text[1])
         puts "in the nyt loop"
         puts textback
-        send_message(textback)
+        send_message(textback,@to)
 
       end
 

@@ -2,7 +2,6 @@ module PostsHelper
 
 	def nyt(second)
 		if (second == "TOP")
-			base_uri = "http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key=39186a552e64bb003eb882b3a7486aba:10:67206205"
 
 			http = Curl.get(base_uri)
 
@@ -10,7 +9,7 @@ module PostsHelper
 			results = json_body['results']
 			top_titles = []
 			results.each.with_index do |res, ind|
-				if (ind < 3)
+				if (ind < 6)
 					top_titles.push(res['title'])
 				end
 			end
@@ -33,9 +32,8 @@ module PostsHelper
 	end
 
 	def article_request(num)
-			base_uri = "http://api.nytimes.com/svc/mostpopular/v2"
-			base_uri+="/mostshared/all-sections/1.json"
-			base_uri += "?api-key=39186a552e64bb003eb882b3a7486aba:10:67206205"
+			base_uri = "http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key=39186a552e64bb003eb882b3a7486aba:10:67206205"
+
 
 			http = Curl.get(base_uri)
 			json_body = JSON.parse(http.body_str)
@@ -49,26 +47,26 @@ module PostsHelper
 			return "Please request one of the three chosen articles"
 	end
 
-	def send_message(text)
+	def send_message(text,number)
 
-		@CALLER_ID = '+15712978794'
-		@ACCOUNT_SID = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
-      	@ACCOUNT_TOKEN = '2804511ccef5b294daf82116c75a8f7d'
+		caller_id = '+15712978794'
+		account_sid = 'AC5c3158c9e08c18f1bd8674a5c9544b42'
+      	account_token = '2804511ccef5b294daf82116c75a8f7d'
 
-      	@client = Twilio::REST::Client.new(ACCOUNT_SID,ACCOUNT_TOKEN)
+      	client = Twilio::REST::Client.new(account_sid,account_token)
 
 		if (text.length <= 145)
-			@client.account.sms.messages.create(
-			        :from => CALLER_ID,
-			        :to => @post.from,
+			client.account.sms.messages.create(
+			        :from => caller_id,
+			        :to => number,
 			        :body => text )   
 		else
 			chars_sent = 0
 			while (chars_sent+1 < text.length)
 				message = text[chars_sent..chars_sent+=145]
-				@client.account.sms.messages.create(
-			        :from => CALLER_ID,
-			        :to => @post.from,
+				client.account.sms.messages.create(
+			        :from => caller_id,
+			        :to => number,
 			        :body => message )  			
 			end
 		end
