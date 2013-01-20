@@ -111,7 +111,10 @@ class PostsController < ApplicationController
 
         p textback
         send_message(textback,@to)
+      elsif (text[0] == "HELP")
+        send_message(help(),@to)
       end
+        
 
       @post.save 
 

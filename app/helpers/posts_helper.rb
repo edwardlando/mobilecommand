@@ -373,5 +373,25 @@ def duckduckgo(text)
 	puts "Message is #{message}"
 	message
 end
+
+def help
+	message = "List of commands:\n"
+	message += "* = variable, || = either, () = options\n"
+	message += "ebay popular (for men || for women)\n"
+	message += "ebay price *item_name*\n"
+	message += "nyt top\n"
+	message += "nyt bus\n"
+	message += "nyt *number*\n"
+	message += "espn top\n"
+	message += "map *origin* | *destination*\n"
+    message += "ddg *query*\n"
+    p message
+    return message
+end
+
+
+
+
+
 end
 
