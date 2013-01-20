@@ -1,4 +1,5 @@
 module PostsHelper
+	include ActionView::Helpers::NumberHelper
 
 	def espn(second)
 		key = 'qzbm6t893h5t4va7uctshvrq'
@@ -95,7 +96,8 @@ module PostsHelper
 		end
 	end
 
-	def ebay(second, third) # avg price for this item on ebay when you type in the name
+	def ebay(second, third, preserved_body) # avg price for this item on ebay when you type in the name
+
 		# demo popular gift ideas for boys
 		#devid = '608eb297-070b-4eab-8e24-79cca0ee7f71'
 		#appid = 'EdwardLa-31d7-4979-ac0b-73b558ce7237'
@@ -116,59 +118,62 @@ module PostsHelper
 
 		elsif (second == "PRICE")
 			# max, min and avg
-			
-			base_uri = "http://svcs.ebay.com/services/search/FindingService/v1"
-		    base_uri += "?OPERATION-NAME=findItemsByKeywords"
-		    base_uri += "&SERVICE-VERSION=1.0.0"
-		    base_uri += "&SECURITY-APPNAME="+appid
-		    base_uri += "&GLOBAL-ID=EBAY-US"
-		    base_uri += "&RESPONSE-DATA-FORMAT=JSON"
-		    base_uri += "&callback=_cb_findItemsByKeywords"
-		    base_uri += "&REST-PAYLOAD"
-		    base_uri += "&keywords="+third
-		    base_uri += "&paginationInput.entriesPerPage=20"
+
+			third = third.gsub(" ", "%20")
+
+			base_uri = "http://ql.io/q?s=result%20%3D%20select%20%22sellingStatus.currentPrice.%24t%22%20from%20finditems%20where%20keywords%3D%22" + third + "%22%0A%0Areturn%20%7B%0A%09%22result%22%20%3A%20%22%7Bresult%7D%22%20%7D"
+			#base_uri = "http://ql.io/q?s=select%20%22sellingStatus.currentPrice.%24t%22%20from%20finditems%20where%20keywords='" + third + "'"
+
+			p '****'
+			p base_uri
+			p '****'
 
 		    http = Curl.get(base_uri)
 			json_body = JSON.parse(http.body_str)
-			results = json_body['searchResult']
+
+			json_body = json_body['result']
 
 			total_price = 0
-			
-			count = results['findItemsByKeywords']['searchResult']['@count']
-			results = results['findItemsByKeywords']['searchResult']['item']
+			count = 0
 
-			min_price = results['sellingStatus']['currentPrice']['__value__']
-			max_price = results['sellingStatus']['currentPrice']['__value__']
+			min_price = json_body[0].to_i
+			max_price = json_body[0].to_i
 			
-			results.each do |res|	
-				current_price = res['sellingStatus']['currentPrice']['__value__']
+			json_body.each do |res|
+				res = res.to_i	
 
-				if (min_price > current_price) 
-					min_price = current_price
+
+				if (min_price > res) 
+					min_price = res
 				end
 
-				if (max_price < current_price)
-					max_price = current_price
+				if (max_price < res)
+					max_price = res
 				end
 
-				total_price += current_price
+				total_price += res
+
+				count += 1
 			end
 
-			average = total_prices/count
-			
+			average = total_price/count
 
-			textback = "Current prices for " + third + " on eBay:\n"
+			textback = "Current prices for " + preserved_body + " on eBay:\n"
 			textback += "Minimum price: $" + number_with_precision(min_price, :precision => 2) + "\n"
 			textback += "Average price: $" + number_with_precision(average, :precision => 2) + "\n"
 			textback += "Maximum price: $" + number_with_precision(max_price, :precision => 2) + "\n"
-			textback += "mblmstr://ebay/popular/" + (rand() * 10).to_i + (rand() * 10).to_i + (rand() * 10).to_i
+			textback += "mblmstr://ebay/popular/" + (0...4).map{ ('a'..'z').to_a[rand(26)] }.join
 			puts textback
 			return textback	
 		end
-			
-	
-
 	end
+
+=begin
+		    http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0
+		    &SECURITY-APPNAME=eBayinc2e-d3b4-4a21-a765-47cc6b01cf7&GLOBAL-ID=EBAY-US&RESPONSE-DATA-FORMAT=JSON
+		    &callback=_cb_findItemsByKeywords&REST-PAYLOAD&keywords=harry%20potter&paginationInput.entriesPerPage=3
+=end
+
 
 	def nyt_article_request(num)
 			base_uri = "http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key=39186a552e64bb003eb882b3a7486aba:10:67206205"
@@ -214,7 +219,11 @@ module PostsHelper
 			chars_in_msg = 0
 			message = ''
 			arr.each do |word|
-				if ((chars_in_msg+word.length) < 160)
+
+				if ((chars_in_msg+word.length) < ( chars_so_far.modulo(160)))
+
+				#if ((chars_in_msg+word.length) < 160)
+
 					chars_in_msg+=(word.length+1)
 					chars_so_far+=(word.length+1)
 					message += "#{word} "
@@ -340,5 +349,5 @@ module PostsHelper
 		end
 		message
 	end
-
 end
+

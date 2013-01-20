@@ -55,7 +55,11 @@ class PostsController < ApplicationController
         :to => @to,
         :body => @body
         )  
+
+      @preserved_body = @body.clone
       @body.upcase!
+
+      preserved_text = @preserved_body.split(" ")
       text = @body.split(" ")
       if (text[0] == "NYT")
         textback = ''
@@ -80,15 +84,28 @@ class PostsController < ApplicationController
         textback = ''
 
         keywords = ''
-        text.each_with_index do |thing,ind|
-          if (keywords == '')
-            keywords = thing
-          else 
-            keywords = keywords + ' ' + thing
+        preserved_keywords  = ''
+        text.each.with_index do |thing, idx|
+          if (idx > 1)
+            if (keywords == '')
+              keywords = thing
+            else 
+              keywords = keywords + ' ' + thing
+            end
           end
         end
 
-        textback = ebay(text[1], keywords) #second and third
+        preserved_text.each.with_index do |thing, idx|
+          if (idx > 1)
+            if (preserved_keywords == '')
+              preserved_keywords = thing
+            else 
+              preserved_keywords = preserved_keywords + ' ' + thing
+            end
+          end
+        end
+
+        textback = ebay(text[1], keywords, preserved_keywords) #second and third
         send_message(textback,@to)
       end
 
