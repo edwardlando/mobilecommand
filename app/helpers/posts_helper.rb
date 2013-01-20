@@ -139,7 +139,7 @@ module PostsHelper
 			chars_in_msg = 0
 			message = ''
 			arr.each do |word|
-				if ((chars_in_msg+word.length) < ( chars_so_far.modulo(160)))
+				if ((chars_in_msg+word.length) < 160)
 					chars_in_msg+=(word.length+1)
 					chars_so_far+=(word.length+1)
 					message += "#{word} "
@@ -149,6 +149,7 @@ module PostsHelper
 					        :to => number,
 					        :body => message )  
 					chars_in_msg = 0
+					message = ''
 					sleep(0.2)					
 				end		
 			end
@@ -162,6 +163,16 @@ module PostsHelper
 		places = text.split("|")
 		origin = places[0]
 		destination = places[1]
+		origin.gsub!(" ","+")
+	    origin.gsub!(",","+")
+	    dest.gsub!(" ","+")
+	    dest.gsub!(",","+")
+	    map_data = ''
+	    if origin.nil?
+        	return "Sorry, wrong origin address!"
+      	elsif dest.nil?
+        	return "Sorry, wrong destination address!"
+        end
 
 #		40.737102,-73.990318|40.749825,-73.987963|40.752946,-73.987384|40.755823,-73.986397
 	end
