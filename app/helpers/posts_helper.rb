@@ -18,12 +18,9 @@ module PostsHelper
 			puts top_titles
 			textback = "Top stories today:\n" 
 			top_titles.each.with_index do |title,ind|
-				textback+=""+ind+") " + title + "\n"
+				textback+=(ind.to_s +") " + title + "\n")
 			end
-#			textback+=+ "1) " + top_titles[0]+"\n" +  "2) " + top_titles[1]+"\n" +"3) " + top_titles[2]
 
-			o =  [('a'..'z')].map{|i| i.to_a}.flatten
-			shortcode  =  (0...3).map{ o[rand(o.length)] }.join
 			textback += "\nmblmstr://nyt/top"
 			puts textback
 			return textback
@@ -43,9 +40,8 @@ module PostsHelper
 			puts top_titles
 			textback = "Top stories today:\n" 
 			top_titles.each.with_index do |title,ind|
-				textback+=(ind+") " + title + "\n")
+				textback+= (ind.to_s + ") " + title + "\n")
 			end
-#			textback+=+ "1) " + top_titles[0]+"\n" +  "2) " + top_titles[1]+"\n" +"3) " + top_titles[2]
 
 			o =  [('a'..'z')].map{|i| i.to_a}.flatten
 			shortcode  =  (0...3).map{ o[rand(o.length)] }.join
