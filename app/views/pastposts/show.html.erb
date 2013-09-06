@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Shortlink:</b>
+  <%= @pastpost.shortlink %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%= @pastpost.body %>
+</p>
+
+
+<%= link_to 'Edit', edit_pastpost_path(@pastpost) %> |
+<%= link_to 'Back', pastposts_path %>

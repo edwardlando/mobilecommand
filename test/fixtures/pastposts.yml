@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  shortlink: MyString
+  body: MyString
+
+two:
+  shortlink: MyString
+  body: MyString
